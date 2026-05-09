@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ORN Travel — Organisation Structure</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1B2A;--brand:#1B4F8A;--gold:#C9A84C;
+  --teal:#0A7E8C;--green:#0B6E4F;--muted:#64748B;
+  --border:#E2E8F0;--bg:#F8FAFC;--white:#fff;
+}
+body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--bg);color:var(--navy);line-height:1.5;overflow-x:hidden}
+
+/* ── HEADER ── */
+.hdr{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.hdr-gold{height:3px;background:var(--gold)}
+.hdr-inner{padding:8px 20px;display:flex;align-items:center;gap:14px}
+.hdr-bars{display:flex;align-items:flex-end;gap:2px;height:26px}
+.hdr-bars span{border-radius:3px;width:6px;display:block}
+.hdr-div{width:1px;height:22px;background:var(--border);flex-shrink:0}
+.hdr-title{font-size:15px;font-weight:800;color:var(--navy)}
+.hdr-sub{font-size:11px;color:var(--muted);font-family:"DM Mono",monospace}
+.hdr-pills{margin-left:auto;display:flex;gap:8px;flex-shrink:0}
+.pill{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;border:1.5px solid;white-space:nowrap}
+.pill-gold{color:#92400E;border-color:rgba(201,168,76,.5);background:#FFFBEB}
+.pill-blue{color:#1B4F8A;border-color:rgba(27,79,138,.3);background:#EFF6FF}
+
+/* ── LAYOUT ── */
+.layout{display:flex;align-items:flex-start;min-height:calc(100vh - 52px);position:relative}
+.svg-col{flex:1;min-width:0;padding:20px;transition:padding-right .35s ease}
+.layout.sidebar-open .svg-col{padding-right:0}
+
+/* ── SVG BOX ── */
+.svg-box{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.svg-top{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.svg-top h2{font-size:13px;font-weight:800;color:var(--navy)}
+.svg-top p{font-size:10px;color:var(--muted);margin-top:1px}
+.svg-hint{padding:7px 18px;background:#F8FAFC;border-bottom:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.svg-hint strong{color:var(--brand)}
+.svg-body{overflow-x:auto;background:#fff;padding:12px}
+.svg-body svg .izone{pointer-events:all;cursor:pointer}
+.svg-legend{display:flex;gap:10px;flex-wrap:wrap;padding:8px 18px;border-top:1px solid var(--border);background:#F8FAFC}
+.leg{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.ldot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:0;overflow:hidden;
+  background:#fff;
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transition:width .35s ease;
+  position:sticky;top:52px;
+  height:calc(100vh - 52px);
+  flex-shrink:0;
+}
+.layout.sidebar-open .sidebar{width:380px}
+.sb-head{padding:18px 20px 14px;background:var(--navy);flex-shrink:0}
+.sb-eyebrow{font-size:9px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--gold);font-family:"DM Mono",monospace;margin-bottom:6px}
+.sb-title-row{display:flex;align-items:flex-start;gap:10px}
+.sb-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.sb-title{font-size:16px;font-weight:800;color:#fff;line-height:1.3;flex:1}
+.sb-close{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#94A3B8;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:sans-serif;transition:.15s}
+.sb-close:hover{background:#C8102E;color:#fff;border-color:#C8102E}
+.sb-nav{display:flex;align-items:center;padding:8px 16px;border-bottom:1px solid var(--border);background:#F8FAFC;flex-shrink:0;gap:6px}
+.sb-nav button{font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:"Plus Jakarta Sans",sans-serif;transition:.15s}
+.sb-nav button:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+.sb-nav button:disabled{opacity:.3;cursor:default}
+.sb-cnt{font-size:10px;color:var(--muted);font-family:"DM Mono",monospace;margin:0 auto}
+.sb-body{padding:18px 20px;overflow-y:auto;flex:1}
+.sb-body::-webkit-scrollbar{width:4px}
+.sb-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ── SIDEBAR CONTENT BLOCKS ── */
+.sb-section{margin-bottom:18px}
+.sb-section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-family:"DM Mono",monospace;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.sb-section-label::after{content:"";flex:1;height:1px;background:var(--border)}
+.sb-purpose{font-size:13px;color:#334155;line-height:1.75;background:#F8FAFC;border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 8px 8px 0}
+.sb-list{list-style:none;display:flex;flex-direction:column;gap:3px}
+.sb-list li{font-size:12px;color:#334155;display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #F1F5F9;line-height:1.55}
+.sb-list li:last-child{border-bottom:none}
+.sb-list li::before{content:"·";color:var(--brand);font-size:15px;line-height:1.2;flex-shrink:0}
+.sb-list li strong{color:var(--navy);font-weight:700}
+.sb-staff-grid{display:flex;flex-direction:column;gap:5px}
+.sb-staff-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#F8FAFC;border-radius:7px;border:1px solid var(--border)}
+.sb-staff-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-staff-name{font-size:12px;font-weight:600;color:var(--navy)}
+.sb-interact{display:flex;flex-direction:column;gap:4px}
+.sb-interact-item{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:#334155;padding:5px 8px;background:#F8FAFC;border-radius:6px;border:1px solid var(--border)}
+.sb-interact-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.sb-foot{padding:10px 16px;border-top:1px solid var(--border);background:#F8FAFC;flex-shrink:0;font-size:9px;color:var(--muted);font-family:"DM Mono",monospace;text-align:center}
+
+text{font-family:"Plus Jakarta Sans","DM Sans",Arial,sans-serif}
+@media(max-width:700px){.layout.sidebar-open .sidebar{width:100%;position:fixed;top:52px;right:0;height:calc(100vh - 52px);z-index:150}.hdr-pills{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-gold"></div>
+  <div class="hdr-inner">
+    <div class="hdr-bars">
+      <span style="height:16px;background:#1b3f6e"></span>
+      <span style="height:20px;background:#1a6fbd"></span>
+      <span style="height:24px;background:#1db5e8"></span>
+      <span style="height:18px;background:#2eb567"></span>
+      <span style="height:24px;background:#f4cd00"></span>
+      <span style="height:20px;background:#d93d1a"></span>
+    </div>
+    <div class="hdr-title">ORN Travel</div>
+    <div class="hdr-div"></div>
+    <div class="hdr-sub">Organisation Structure &nbsp;·&nbsp; All Departments &nbsp;·&nbsp; 2026</div>
+    <div class="hdr-pills">
+      <span class="pill pill-gold">UK Tour Operator Model</span>
+      <span class="pill pill-blue">Click any department to explore</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout" id="layout">
+
+  <!-- SVG COLUMN -->
+  <div class="svg-col">
+    <div class="svg-box">
+      <div class="svg-top">
+        <div>
+          <h2>ORN Travel — Organisational Structure &amp; Department Functions</h2>
+          <p>Executive leadership · 9 core departments · full UK tour operator model</p>
+        </div>
+      </div>
+      <div class="svg-hint">
+        <span style="font-size:14px">👆</span>
+        <strong>Click any department</strong>&nbsp; to open its full breakdown in the sidebar &nbsp;·&nbsp; use <strong>← →</strong> keys to navigate
+      </div>
+      <div class="svg-body">
+
+<svg viewBox="0 0 860 1040" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:860px;height:auto;display:block;margin:0 auto;background:#fff">
+
+<!-- HEADER -->
+<rect x="0" y="0" width="860" height="70" fill="#0D1B2A"/>
+<rect x="0" y="66" width="860" height="4" fill="#C9A84C"/>
+<rect x="30" y="16" width="7" height="18" rx="3" fill="#1b3f6e"/>
+<rect x="39" y="12" width="7" height="22" rx="3" fill="#1a6fbd"/>
+<rect x="48" y="8"  width="7" height="26" rx="3" fill="#1db5e8"/>
+<rect x="57" y="14" width="7" height="20" rx="3" fill="#2eb567"/>
+<rect x="66" y="8"  width="7" height="26" rx="3" fill="#f4cd00"/>
+<rect x="75" y="11" width="7" height="23" rx="3" fill="#d93d1a"/>
+<text x="94" y="30" fill="#fff" font-size="15" font-weight="800">ORN Travel</text>
+<text x="430" y="50" text-anchor="middle" fill="#94A3B8" font-size="11">Organisation Structure · UK Tour Operator Model · 2026</text>
+
+<!-- TIER 1: EXEC MANAGEMENT -->
+<rect x="28" y="84" width="804" height="15" fill="#0D1B2A" rx="3" opacity="0.1"/>
+<text x="430" y="94" text-anchor="middle" fill="#0D1B2A" font-size="9.5" font-weight="700">TIER 1 — EXECUTIVE MANAGEMENT</text>
+
+<!-- Exec box -->
+<rect x="270" y="106" width="320" height="72" fill="#0D1B2A" rx="10" stroke="#C9A84C" stroke-width="2"/>
+<text x="430" y="130" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">Executive Management</text>
+<text x="430" y="150" text-anchor="middle" fill="#C9A84C" font-size="11" font-weight="500">MD / CEO · Commercial · Finance · Operations Directors</text>
+<text x="430" y="166" text-anchor="middle" fill="#94A3B8" font-size="9.5">Oversees all departments · sets strategy · approves budgets</text>
+
+<!-- Connector down -->
+<line x1="430" y1="188" x2="430" y2="204" stroke="#CBD5E1" stroke-width="1.5"/>
+<line x1="48" y1="204" x2="812" y2="204" stroke="#CBD5E1" stroke-width="1"/>
+
+<!-- TIER 2 LABEL -->
+<rect x="28" y="212" width="804" height="15" fill="#1B4F8A" rx="3" opacity="0.1"/>
+<text x="430" y="222" text-anchor="middle" fill="#1B4F8A" font-size="9.5" font-weight="700">TIER 2 — CORE REVENUE &amp; PRODUCT DEPARTMENTS</text>
+
+<!-- Spokes -->
+<line x1="105" y1="204" x2="105" y2="234" stroke="#CBD5E1" stroke-width="1"/>
+<line x1="267" y1="204" x2="267" y2="234" stroke="#CBD5E1" stroke-width="1"/>
+<line x1="430" y1="204" x2="430" y2="234" stroke="#CBD5E1" stroke-width="1"/>
+<line x1="593" y1="204" x2="593" y2="234" stroke="#CBD5E1" stroke-width="1"/>
+<line x1="755" y1="204" x2="755" y2="234" stroke="#CBD5E1" stroke-width="1"/>
+
+<!-- SALES & RESERVATIONS -->
+<rect x="28" y="234" width="154" height="108" fill="#EFF6FF" rx="10" stroke="#BFDBFE" stroke-width="1.5"/>
+<rect x="28" y="234" width="154" height="28" fill="#1D4ED8" rx="10"/>
+<rect x="28" y="254" width="154" height="8" fill="#1D4ED8"/>
+<text x="105" y="250" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Sales &amp; Reservations</text>
+<text x="105" y="275" text-anchor="middle" fill="#1E3A8A" font-size="9.5" font-weight="600">Enquiries · Bookings</text>
+<text x="105" y="291" text-anchor="middle" fill="#1E3A8A" font-size="9">Quotes · Amendments</text>
+<text x="105" y="305" text-anchor="middle" fill="#1E3A8A" font-size="9">Upselling · Groups</text>
+<text x="105" y="320" text-anchor="middle" fill="#1E3A8A" font-size="9">Relationships</text>
+<text x="105" y="335" text-anchor="middle" fill="#1D4ED8" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- PRODUCT & CONTRACTING -->
+<rect x="190" y="234" width="154" height="108" fill="#F0FDF4" rx="10" stroke="#A7F3D0" stroke-width="1.5"/>
+<rect x="190" y="234" width="154" height="28" fill="#065F46" rx="10"/>
+<rect x="190" y="254" width="154" height="8" fill="#065F46"/>
+<text x="267" y="250" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Product &amp; Contracting</text>
+<text x="267" y="275" text-anchor="middle" fill="#064E3B" font-size="9.5" font-weight="600">Hotel rates · Airlines</text>
+<text x="267" y="291" text-anchor="middle" fill="#064E3B" font-size="9">Package pricing</text>
+<text x="267" y="305" text-anchor="middle" fill="#064E3B" font-size="9">Supplier relationships</text>
+<text x="267" y="320" text-anchor="middle" fill="#064E3B" font-size="9">Itinerary design</text>
+<text x="267" y="335" text-anchor="middle" fill="#065F46" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- MARKETING -->
+<rect x="352" y="234" width="154" height="108" fill="#FFF1F2" rx="10" stroke="#FCA5A5" stroke-width="1.5"/>
+<rect x="352" y="234" width="154" height="28" fill="#9D174D" rx="10"/>
+<rect x="352" y="254" width="154" height="8" fill="#9D174D"/>
+<text x="429" y="250" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Marketing</text>
+<text x="429" y="275" text-anchor="middle" fill="#831843" font-size="9.5" font-weight="600">Digital · Social · SEO</text>
+<text x="429" y="291" text-anchor="middle" fill="#831843" font-size="9">Email campaigns</text>
+<text x="429" y="305" text-anchor="middle" fill="#831843" font-size="9">Brand &amp; content</text>
+<text x="429" y="320" text-anchor="middle" fill="#831843" font-size="9">Paid advertising</text>
+<text x="429" y="335" text-anchor="middle" fill="#9D174D" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- OPERATIONS -->
+<rect x="514" y="234" width="154" height="108" fill="#FFFBEB" rx="10" stroke="#FDE68A" stroke-width="1.5"/>
+<rect x="514" y="234" width="154" height="28" fill="#B45309" rx="10"/>
+<rect x="514" y="254" width="154" height="8" fill="#B45309"/>
+<text x="591" y="250" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Operations</text>
+<text x="591" y="275" text-anchor="middle" fill="#78350F" font-size="9.5" font-weight="600">Ticketing · Docs</text>
+<text x="591" y="291" text-anchor="middle" fill="#78350F" font-size="9">Flight operations</text>
+<text x="591" y="305" text-anchor="middle" fill="#78350F" font-size="9">Schedule changes</text>
+<text x="591" y="320" text-anchor="middle" fill="#78350F" font-size="9">Overseas support</text>
+<text x="591" y="335" text-anchor="middle" fill="#B45309" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- CUSTOMER SERVICE -->
+<rect x="676" y="234" width="154" height="108" fill="#F5F3FF" rx="10" stroke="#DDD6FE" stroke-width="1.5"/>
+<rect x="676" y="234" width="154" height="28" fill="#7C3AED" rx="10"/>
+<rect x="676" y="254" width="154" height="8" fill="#7C3AED"/>
+<text x="753" y="250" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Customer Service</text>
+<text x="753" y="275" text-anchor="middle" fill="#4C1D95" font-size="9.5" font-weight="600">Pre · During · Post</text>
+<text x="753" y="291" text-anchor="middle" fill="#4C1D95" font-size="9">Complaints handling</text>
+<text x="753" y="305" text-anchor="middle" fill="#4C1D95" font-size="9">Amendments</text>
+<text x="753" y="320" text-anchor="middle" fill="#4C1D95" font-size="9">Travel support</text>
+<text x="753" y="335" text-anchor="middle" fill="#7C3AED" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- TIER 3 LABEL -->
+<line x1="28" y1="358" x2="832" y2="358" stroke="#E2E8F0" stroke-width="0.5"/>
+<rect x="28" y="366" width="804" height="15" fill="#059669" rx="3" opacity="0.1"/>
+<text x="430" y="376" text-anchor="middle" fill="#059669" font-size="9.5" font-weight="700">TIER 3 — FINANCE, COMPLIANCE, IT &amp; ADMINISTRATION</text>
+
+<!-- Spokes tier 3 -->
+<line x1="143" y1="358" x2="143" y2="388" stroke="#CBD5E1" stroke-width="1"/>
+<line x1="332" y1="358" x2="332" y2="388" stroke="#CBD5E1" stroke-width="1"/>
+<line x1="528" y1="358" x2="528" y2="388" stroke="#CBD5E1" stroke-width="1"/>
+<line x1="718" y1="358" x2="718" y2="388" stroke="#CBD5E1" stroke-width="1"/>
+
+<!-- FINANCE -->
+<rect x="52" y="388" width="182" height="108" fill="#FEFCE8" rx="10" stroke="#FDE68A" stroke-width="1.5"/>
+<rect x="52" y="388" width="182" height="28" fill="#A16207" rx="10"/>
+<rect x="52" y="408" width="182" height="8" fill="#A16207"/>
+<text x="143" y="404" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Finance &amp; Accounts</text>
+<text x="143" y="429" text-anchor="middle" fill="#713F12" font-size="9.5" font-weight="600">AP/AR · Cash flow</text>
+<text x="143" y="445" text-anchor="middle" fill="#713F12" font-size="9">Supplier payments</text>
+<text x="143" y="459" text-anchor="middle" fill="#713F12" font-size="9">ATOL compliance</text>
+<text x="143" y="473" text-anchor="middle" fill="#713F12" font-size="9">Payroll · Reporting</text>
+<text x="143" y="488" text-anchor="middle" fill="#A16207" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- COMPLIANCE & LEGAL -->
+<rect x="242" y="388" width="182" height="108" fill="#FFF1F2" rx="10" stroke="#FCA5A5" stroke-width="1.5"/>
+<rect x="242" y="388" width="182" height="28" fill="#BE123C" rx="10"/>
+<rect x="242" y="408" width="182" height="8" fill="#BE123C"/>
+<text x="333" y="404" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Compliance &amp; Legal</text>
+<text x="333" y="429" text-anchor="middle" fill="#881337" font-size="9.5" font-weight="600">ATOL · ABTA · GDPR</text>
+<text x="333" y="445" text-anchor="middle" fill="#881337" font-size="9">Health &amp; Safety</text>
+<text x="333" y="459" text-anchor="middle" fill="#881337" font-size="9">Supplier audits</text>
+<text x="333" y="473" text-anchor="middle" fill="#881337" font-size="9">Risk management</text>
+<text x="333" y="488" text-anchor="middle" fill="#BE123C" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- IT & SYSTEMS -->
+<rect x="432" y="388" width="182" height="108" fill="#EFF6FF" rx="10" stroke="#BFDBFE" stroke-width="1.5"/>
+<rect x="432" y="388" width="182" height="28" fill="#1D4ED8" rx="10"/>
+<rect x="432" y="408" width="182" height="8" fill="#1D4ED8"/>
+<text x="523" y="404" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">IT &amp; Systems</text>
+<text x="523" y="429" text-anchor="middle" fill="#1E3A8A" font-size="9.5" font-weight="600">Booking systems</text>
+<text x="523" y="445" text-anchor="middle" fill="#1E3A8A" font-size="9">Website &amp; CRM</text>
+<text x="523" y="459" text-anchor="middle" fill="#1E3A8A" font-size="9">API integrations</text>
+<text x="523" y="473" text-anchor="middle" fill="#1E3A8A" font-size="9">Cybersecurity</text>
+<text x="523" y="488" text-anchor="middle" fill="#1D4ED8" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- HR & ADMIN (implied from compliance/legal + exec notes) -->
+<rect x="622" y="388" width="182" height="108" fill="#F1F5F9" rx="10" stroke="#CBD5E1" stroke-width="1.5"/>
+<rect x="622" y="388" width="182" height="28" fill="#334155" rx="10"/>
+<rect x="622" y="408" width="182" height="8" fill="#334155"/>
+<text x="713" y="404" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">HR &amp; Administration</text>
+<text x="713" y="429" text-anchor="middle" fill="#1E293B" font-size="9.5" font-weight="600">Recruitment · HR</text>
+<text x="713" y="445" text-anchor="middle" fill="#1E293B" font-size="9">Staff management</text>
+<text x="713" y="459" text-anchor="middle" fill="#1E293B" font-size="9">Office admin</text>
+<text x="713" y="473" text-anchor="middle" fill="#1E293B" font-size="9">Payroll admin</text>
+<text x="713" y="488" text-anchor="middle" fill="#334155" font-size="8.5" font-weight="600">↓ Click to explore</text>
+
+<!-- ── WORKFLOW ── -->
+<line x1="28" y1="512" x2="832" y2="512" stroke="#E2E8F0" stroke-width="0.5"/>
+<rect x="28" y="520" width="804" height="15" fill="#1B4F8A" rx="3" opacity="0.1"/>
+<text x="430" y="530" text-anchor="middle" fill="#1B4F8A" font-size="9.5" font-weight="700">BOOKING WORKFLOW — HOW A HOLIDAY MOVES THROUGH THE BUSINESS</text>
+
+<!-- Flow step boxes -->
+<rect x="28" y="546" width="106" height="68" fill="#EFF6FF" rx="8" stroke="#1D4ED8" stroke-width="1.5"/>
+<rect x="28" y="546" width="106" height="3" fill="#1D4ED8" rx="2"/>
+<text x="81" y="562" text-anchor="middle" fill="#1D4ED8" font-size="8.5" font-weight="700">01</text>
+<text x="81" y="576" text-anchor="middle" fill="#0D1B2A" font-size="10" font-weight="700">Marketing</text>
+<text x="81" y="591" text-anchor="middle" fill="#64748B" font-size="8.5">Generates</text>
+<text x="81" y="604" text-anchor="middle" fill="#64748B" font-size="8.5">leads</text>
+<text x="137" y="583" text-anchor="middle" fill="#94A3B8" font-size="13">→</text>
+
+<rect x="144" y="546" width="106" height="68" fill="#EFF6FF" rx="8" stroke="#1D4ED8" stroke-width="1.5"/>
+<rect x="144" y="546" width="106" height="3" fill="#1D4ED8" rx="2"/>
+<text x="197" y="562" text-anchor="middle" fill="#1D4ED8" font-size="8.5" font-weight="700">02</text>
+<text x="197" y="576" text-anchor="middle" fill="#0D1B2A" font-size="10" font-weight="700">Sales</text>
+<text x="197" y="591" text-anchor="middle" fill="#64748B" font-size="8.5">Converts</text>
+<text x="197" y="604" text-anchor="middle" fill="#64748B" font-size="8.5">bookings</text>
+<text x="253" y="583" text-anchor="middle" fill="#94A3B8" font-size="13">→</text>
+
+<rect x="260" y="546" width="106" height="68" fill="#FEFCE8" rx="8" stroke="#A16207" stroke-width="1.5"/>
+<rect x="260" y="546" width="106" height="3" fill="#A16207" rx="2"/>
+<text x="313" y="562" text-anchor="middle" fill="#A16207" font-size="8.5" font-weight="700">03</text>
+<text x="313" y="576" text-anchor="middle" fill="#0D1B2A" font-size="10" font-weight="700">Finance</text>
+<text x="313" y="591" text-anchor="middle" fill="#64748B" font-size="8.5">Collects</text>
+<text x="313" y="604" text-anchor="middle" fill="#64748B" font-size="8.5">payment</text>
+<text x="369" y="583" text-anchor="middle" fill="#94A3B8" font-size="13">→</text>
+
+<rect x="376" y="546" width="106" height="68" fill="#FFFBEB" rx="8" stroke="#B45309" stroke-width="1.5"/>
+<rect x="376" y="546" width="106" height="3" fill="#B45309" rx="2"/>
+<text x="429" y="562" text-anchor="middle" fill="#B45309" font-size="8.5" font-weight="700">04</text>
+<text x="429" y="576" text-anchor="middle" fill="#0D1B2A" font-size="10" font-weight="700">Operations</text>
+<text x="429" y="591" text-anchor="middle" fill="#64748B" font-size="8.5">Processes</text>
+<text x="429" y="604" text-anchor="middle" fill="#64748B" font-size="8.5">holiday</text>
+<text x="485" y="583" text-anchor="middle" fill="#94A3B8" font-size="13">→</text>
+
+<rect x="492" y="546" width="106" height="68" fill="#F0FDF4" rx="8" stroke="#065F46" stroke-width="1.5"/>
+<rect x="492" y="546" width="106" height="3" fill="#065F46" rx="2"/>
+<text x="545" y="562" text-anchor="middle" fill="#065F46" font-size="8.5" font-weight="700">05</text>
+<text x="545" y="576" text-anchor="middle" fill="#0D1B2A" font-size="10" font-weight="700">Customer</text>
+<text x="545" y="591" text-anchor="middle" fill="#64748B" font-size="8.5">Travels</text>
+<text x="545" y="604" text-anchor="middle" fill="#64748B" font-size="8.5">with support</text>
+<text x="601" y="583" text-anchor="middle" fill="#94A3B8" font-size="13">→</text>
+
+<rect x="608" y="546" width="106" height="68" fill="#F5F3FF" rx="8" stroke="#7C3AED" stroke-width="1.5"/>
+<rect x="608" y="546" width="106" height="3" fill="#7C3AED" rx="2"/>
+<text x="661" y="562" text-anchor="middle" fill="#7C3AED" font-size="8.5" font-weight="700">06</text>
+<text x="661" y="576" text-anchor="middle" fill="#0D1B2A" font-size="10" font-weight="700">CS Aftercare</text>
+<text x="661" y="591" text-anchor="middle" fill="#64748B" font-size="8.5">Feedback</text>
+<text x="661" y="604" text-anchor="middle" fill="#64748B" font-size="8.5">&amp; review</text>
+<text x="717" y="583" text-anchor="middle" fill="#94A3B8" font-size="13">→</text>
+
+<rect x="724" y="546" width="108" height="68" fill="#0D1B2A" rx="8"/>
+<text x="778" y="562" text-anchor="middle" fill="#C9A84C" font-size="8.5" font-weight="700">07</text>
+<text x="778" y="578" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Management</text>
+<text x="778" y="593" text-anchor="middle" fill="#94A3B8" font-size="8.5">Reviews</text>
+<text x="778" y="606" text-anchor="middle" fill="#94A3B8" font-size="8.5">performance</text>
+
+<!-- ── DUBAI EXAMPLE ── -->
+<line x1="28" y1="630" x2="832" y2="630" stroke="#E2E8F0" stroke-width="0.5"/>
+<rect x="28" y="638" width="804" height="15" fill="#C9A84C" rx="3" opacity="0.18"/>
+<text x="430" y="648" text-anchor="middle" fill="#92400E" font-size="9.5" font-weight="700">EXAMPLE: HOW ALL DEPARTMENTS WORK TOGETHER — CUSTOMER BOOKS DUBAI HOLIDAY</text>
+
+<!-- Dubai steps grid -->
+<rect x="28"  y="662" width="116" height="58" fill="#FFF1F2" rx="8" stroke="#FCA5A5" stroke-width="1"/>
+<text x="86"  y="679" text-anchor="middle" fill="#9D174D" font-size="9" font-weight="700">Marketing</text>
+<text x="86"  y="694" text-anchor="middle" fill="#64748B" font-size="8.5">Runs Dubai social</text>
+<text x="86"  y="707" text-anchor="middle" fill="#64748B" font-size="8.5">media advert</text>
+
+<text x="150" y="693" text-anchor="middle" fill="#CBD5E1" font-size="12">→</text>
+
+<rect x="158" y="662" width="116" height="58" fill="#EFF6FF" rx="8" stroke="#BFDBFE" stroke-width="1"/>
+<text x="216" y="679" text-anchor="middle" fill="#1D4ED8" font-size="9" font-weight="700">Sales</text>
+<text x="216" y="694" text-anchor="middle" fill="#64748B" font-size="8.5">Customer enquires,</text>
+<text x="216" y="707" text-anchor="middle" fill="#64748B" font-size="8.5">confirms booking</text>
+
+<text x="280" y="693" text-anchor="middle" fill="#CBD5E1" font-size="12">→</text>
+
+<rect x="288" y="662" width="116" height="58" fill="#FEFCE8" rx="8" stroke="#FDE68A" stroke-width="1"/>
+<text x="346" y="679" text-anchor="middle" fill="#A16207" font-size="9" font-weight="700">Finance</text>
+<text x="346" y="694" text-anchor="middle" fill="#64748B" font-size="8.5">Processes deposit</text>
+<text x="346" y="707" text-anchor="middle" fill="#64748B" font-size="8.5">payment</text>
+
+<text x="410" y="693" text-anchor="middle" fill="#CBD5E1" font-size="12">→</text>
+
+<rect x="418" y="662" width="116" height="58" fill="#FFFBEB" rx="8" stroke="#FDE68A" stroke-width="1"/>
+<text x="476" y="679" text-anchor="middle" fill="#B45309" font-size="9" font-weight="700">Operations</text>
+<text x="476" y="694" text-anchor="middle" fill="#64748B" font-size="8.5">Issues tickets,</text>
+<text x="476" y="707" text-anchor="middle" fill="#64748B" font-size="8.5">vouchers, transfers</text>
+
+<text x="540" y="693" text-anchor="middle" fill="#CBD5E1" font-size="12">→</text>
+
+<rect x="548" y="662" width="116" height="58" fill="#F0FDF4" rx="8" stroke="#A7F3D0" stroke-width="1"/>
+<text x="606" y="679" text-anchor="middle" fill="#065F46" font-size="9" font-weight="700">Product</text>
+<text x="606" y="694" text-anchor="middle" fill="#64748B" font-size="8.5">Confirms supplier</text>
+<text x="606" y="707" text-anchor="middle" fill="#64748B" font-size="8.5">rates &amp; contracts</text>
+
+<text x="670" y="693" text-anchor="middle" fill="#CBD5E1" font-size="12">→</text>
+
+<rect x="678" y="662" width="174" height="58" fill="#F1F5F9" rx="8" stroke="#CBD5E1" stroke-width="1"/>
+<text x="765" y="679" text-anchor="middle" fill="#334155" font-size="9" font-weight="700">CS · Compliance · Management</text>
+<text x="765" y="694" text-anchor="middle" fill="#64748B" font-size="8.5">Seat requests · UK reg check</text>
+<text x="765" y="707" text-anchor="middle" fill="#64748B" font-size="8.5">Profit margin review</text>
+
+<!-- ── KEY PRINCIPLES ── -->
+<line x1="28" y1="736" x2="832" y2="736" stroke="#E2E8F0" stroke-width="0.5"/>
+<rect x="28" y="744" width="804" height="15" fill="#0D1B2A" rx="3" opacity="0.1"/>
+<text x="430" y="754" text-anchor="middle" fill="#0D1B2A" font-size="9.5" font-weight="700">THIS STRUCTURE ALLOWS ORN TRAVEL TO SCALE FROM INDEPENDENT AGENCY TO FULLY LICENSED UK TOUR OPERATOR</text>
+
+<rect x="28"  y="768" width="156" height="76" fill="#EFF6FF" rx="8" stroke="#BFDBFE" stroke-width="1.5"/>
+<rect x="28"  y="768" width="156" height="3" fill="#1D4ED8" rx="2"/>
+<text x="106" y="786" text-anchor="middle" fill="#1D4ED8" font-size="8.5" font-weight="700">ATOL PROTECTED</text>
+<text x="106" y="802" text-anchor="middle" fill="#0D1B2A" font-size="9.5" font-weight="700">Financial Protection</text>
+<text x="106" y="817" text-anchor="middle" fill="#64748B" font-size="8.5">Finance &amp; Compliance</text>
+<text x="106" y="830" text-anchor="middle" fill="#64748B" font-size="8.5">ensure ATOL &amp; ABTA</text>
+<text x="106" y="841" text-anchor="middle" fill="#64748B" font-size="8.5">standards are met</text>
+
+<rect x="192" y="768" width="156" height="76" fill="#F0FDF4" rx="8" stroke="#A7F3D0" stroke-width="1.5"/>
+<rect x="192" y="768" width="156" height="3" fill="#065F46" rx="2"/>
+<text x="270" y="786" text-anchor="middle" fill="#065F46" font-size="8.5" font-weight="700">PRODUCT DRIVEN</text>
+<text x="270" y="802" text-anchor="middle" fill="#0D1B2A" font-size="9.5" font-weight="700">Supply Before Sales</text>
+<text x="270" y="817" text-anchor="middle" fill="#64748B" font-size="8.5">Contracting builds the</text>
+<text x="270" y="830" text-anchor="middle" fill="#64748B" font-size="8.5">product. Sales converts</text>
+<text x="270" y="841" text-anchor="middle" fill="#64748B" font-size="8.5">it into bookings</text>
+
+<rect x="356" y="768" width="156" height="76" fill="#FFFBEB" rx="8" stroke="#FDE68A" stroke-width="1.5"/>
+<rect x="356" y="768" width="156" height="3" fill="#B45309" rx="2"/>
+<text x="434" y="786" text-anchor="middle" fill="#B45309" font-size="8.5" font-weight="700">OPERATIONALLY LED</text>
+<text x="434" y="802" text-anchor="middle" fill="#0D1B2A" font-size="9.5" font-weight="700">Seamless Delivery</text>
+<text x="434" y="817" text-anchor="middle" fill="#64748B" font-size="8.5">Operations ensures</text>
+<text x="434" y="830" text-anchor="middle" fill="#64748B" font-size="8.5">every holiday departs</text>
+<text x="434" y="841" text-anchor="middle" fill="#64748B" font-size="8.5">and returns flawlessly</text>
+
+<rect x="520" y="768" width="156" height="76" fill="#F5F3FF" rx="8" stroke="#DDD6FE" stroke-width="1.5"/>
+<rect x="520" y="768" width="156" height="3" fill="#7C3AED" rx="2"/>
+<text x="598" y="786" text-anchor="middle" fill="#7C3AED" font-size="8.5" font-weight="700">CUSTOMER CENTRIC</text>
+<text x="598" y="802" text-anchor="middle" fill="#0D1B2A" font-size="9.5" font-weight="700">End-to-End Care</text>
+<text x="598" y="817" text-anchor="middle" fill="#64748B" font-size="8.5">CS &amp; Sales manage</text>
+<text x="598" y="830" text-anchor="middle" fill="#64748B" font-size="8.5">every touchpoint from</text>
+<text x="598" y="841" text-anchor="middle" fill="#64748B" font-size="8.5">enquiry to aftercare</text>
+
+<rect x="684" y="768" width="156" height="76" fill="#FEFCE8" rx="8" stroke="#FDE68A" stroke-width="1.5"/>
+<rect x="684" y="768" width="156" height="3" fill="#A16207" rx="2"/>
+<text x="762" y="786" text-anchor="middle" fill="#A16207" font-size="8.5" font-weight="700">DATA &amp; TECH</text>
+<text x="762" y="802" text-anchor="middle" fill="#0D1B2A" font-size="9.5" font-weight="700">Systems-Powered</text>
+<text x="762" y="817" text-anchor="middle" fill="#64748B" font-size="8.5">IT &amp; Finance drive</text>
+<text x="762" y="830" text-anchor="middle" fill="#64748B" font-size="8.5">reporting, booking</text>
+<text x="762" y="841" text-anchor="middle" fill="#64748B" font-size="8.5">systems &amp; CRM</text>
+
+<!-- FOOTER -->
+<line x1="0" y1="860" x2="860" y2="860" stroke="#E2E8F0" stroke-width="1"/>
+<rect x="0" y="860" width="860" height="24" fill="#F8FAFC"/>
+<text x="430" y="875" text-anchor="middle" fill="#94A3B8" font-size="8">ORN Travel · Organisation Structure · UK Tour Operator Model · Internal Use · 2026</text>
+
+<!-- ═══════════════════ INVISIBLE CLICK ZONES ═══════════════════ -->
+
+<!-- Executive Management -->
+<rect class="izone" data-id="exec" data-icon="🏛️" data-layer="TIER 1 — EXECUTIVE MANAGEMENT"
+  data-title="Executive Management"
+  data-purpose="The leadership team controls the overall direction of the company, growth strategy, finances, partnerships, staffing, and legal responsibilities."
+  data-staff="Managing Director / CEO||Commercial Director||Finance Director||Operations Director"
+  data-responsibilities="Receives reports and KPIs from all departments||Approves budgets, supplier agreements and annual strategy||Works closely with Finance and Commercial teams on P&amp;L||Oversees business performance and legal compliance across all offices||Sets company culture and growth vision"
+  data-interactions="Receives reports from all departments||Approves budgets and supplier agreements||Works closely with Finance and Commercial teams||Oversees performance and compliance across the business"
+  x="270" y="106" width="320" height="72" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- Sales & Reservations -->
+<rect class="izone" data-id="sales" data-icon="💼" data-layer="TIER 2 — CORE REVENUE DEPARTMENT"
+  data-title="Sales &amp; Reservations"
+  data-purpose="Handles all customer enquiries, quotations, bookings, amendments and upselling of holidays. The primary revenue-generating department."
+  data-staff="Sales Manager||Senior Travel Consultants||Reservations Consultants||Group Travel Consultants||Admin Support"
+  data-responsibilities="Answer all inbound enquiries via phone, email and web||Build detailed holiday quotes and present itineraries||Confirm bookings and process all deposits and payments||Handle all booking amendments and changes||Upsell extras — travel insurance, upgrades, excursions||Maintain long-term customer relationships for repeat business"
+  data-interactions="Works with Product for pricing, availability and itineraries||Hands confirmed bookings to Operations||Receives campaign leads from Marketing||Coordinates with Finance for payments and refunds||Escalates complaints and issues to Customer Service"
+  x="28" y="234" width="154" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- Product & Contracting -->
+<rect class="izone" data-id="product" data-icon="📋" data-layer="TIER 2 — CORE REVENUE DEPARTMENT"
+  data-title="Product &amp; Contracting"
+  data-purpose="Creates the actual holiday products sold by the business. Negotiates with all suppliers and builds the packages that Sales then sells."
+  data-staff="Product Manager||Contracting Managers||Destination Executives||Supplier Coordinators"
+  data-responsibilities="Negotiate hotel rates and accommodation contracts globally||Secure airline contracts and seat allocations||Arrange transfer and excursion contracts in destination||Build package pricing with correct margin and market positioning||Manage all ongoing supplier relationships and renewals||Conduct annual rate reviews and product refresh cycles"
+  data-interactions="Supplies rates and availability directly to Sales||Works with Marketing on promotions and featured product||Coordinates with Operations for seamless delivery||Works with Finance regarding supplier payment terms||Supports Customer Service when supplier issues arise"
+  x="190" y="234" width="154" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- Marketing -->
+<rect class="izone" data-id="marketing" data-icon="📣" data-layer="TIER 2 — CORE REVENUE DEPARTMENT"
+  data-title="Marketing"
+  data-purpose="Generates leads and promotes the ORN Travel brand and holiday products across all channels."
+  data-staff="Marketing Manager||Social Media Executive||Content Creator||Graphic Designer||SEO / Website Executive"
+  data-responsibilities="Run all social media channels and paid social campaigns||Manage the website, landing pages and SEO performance||Produce email marketing campaigns and newsletters||Create promotional offers and seasonal campaigns||Build brand awareness across all target markets||Manage paid advertising (Google, Meta, YouTube)"
+  data-interactions="Receives product offers and pricing from Product||Sends qualified leads to Sales team||Collects customer reviews and testimonials via CS||Coordinates with Executive team on brand strategy"
+  x="352" y="234" width="154" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- Operations -->
+<rect class="izone" data-id="ops" data-icon="⚙️" data-layer="TIER 2 — CORE REVENUE DEPARTMENT"
+  data-title="Operations"
+  data-purpose="Ensures all holidays run smoothly after booking confirmation. The delivery engine of the business."
+  data-staff="Operations Manager||Ticketing Team||Documentation Team||Flight Operations Coordinators||Overseas Support Coordinators"
+  data-responsibilities="Issue all travel documents — tickets, vouchers, hotel confirmations||Manage airline ticketing across all GDS systems||Handle all flight schedule changes, reissues and disruptions||Coordinate all transfers and ground logistics in destination||Provide 24/7 support to customers while they are travelling||Manage any in-destination emergencies or disruptions"
+  data-interactions="Receives all confirmed bookings directly from Sales||Works with Product for supplier coordination and contacts||Supports Customer Service during live travel issues||Coordinates with Finance on supplier invoices and reconciliation"
+  x="514" y="234" width="154" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- Customer Service -->
+<rect class="izone" data-id="cs" data-icon="🎧" data-layer="TIER 2 — CORE REVENUE DEPARTMENT"
+  data-title="Customer Service"
+  data-purpose="Looks after customers before, during and after travel. Protects the brand reputation and drives repeat bookings."
+  data-staff="Customer Service Manager||Customer Support Advisors||Complaints Handlers||Aftercare Team"
+  data-responsibilities="Handle all formal complaints professionally and to ABTA standards||Manage booking amendments requested by clients||Assist clients with travel problems while on holiday||Process feedback and satisfaction surveys post-travel||Identify service improvements from complaint trends||Provide testimonials and positive reviews to Marketing"
+  data-interactions="Works with Operations for live in-destination issues||Coordinates with Sales on booking amendments||Escalates supplier problems to Product team||Feeds reviews and testimonials to Marketing"
+  x="676" y="234" width="154" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- Finance -->
+<rect class="izone" data-id="finance" data-icon="💰" data-layer="TIER 3 — FINANCE, COMPLIANCE &amp; SUPPORT"
+  data-title="Finance &amp; Accounts"
+  data-purpose="Controls all company finances, supplier payments, cash flow, profitability and regulatory financial compliance."
+  data-staff="Finance Director||Management Accountant||Accounts Assistants||Credit Control||Payroll Administrator"
+  data-responsibilities="Process all customer payments, deposits and balance collections||Pay all suppliers on contracted payment terms||Monitor daily and monthly cash flow across the business||Produce monthly management accounts and P&amp;L reports||Manage all customer refunds in line with package travel regulations||Ensure ATOL financial compliance including trust account management||Process staff payroll and commission payments"
+  data-interactions="Works with Sales on customer payment balances||Works with Product on supplier payment schedules||Works with Management on budgets and forecasts||Supports Operations with financial reconciliations"
+  x="52" y="388" width="182" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- Compliance & Legal -->
+<rect class="izone" data-id="compliance" data-icon="⚖️" data-layer="TIER 3 — COMPLIANCE &amp; LEGAL"
+  data-title="Compliance &amp; Legal"
+  data-purpose="Ensures ORN Travel operates legally and safely under all UK travel regulations and industry standards."
+  data-staff="Compliance Manager||Health &amp; Safety Officer||GDPR Administrator||Legal Support"
+  data-responsibilities="Maintain ATOL licence and ensure full financial compliance||Manage ABTA membership and Code of Conduct adherence||Ensure full GDPR compliance across all customer data handling||Conduct Health &amp; Safety checks on all key suppliers||Carry out supplier audits to confirm standards are met||Manage business risk register and risk mitigation processes||Review all supplier contracts alongside the Product team"
+  data-interactions="Works across every single department in the business||Reviews supplier contracts with Product team||Supports Customer Service on legally sensitive complaints||Reports directly to Executive Management"
+  x="242" y="388" width="182" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- IT & Systems -->
+<rect class="izone" data-id="it" data-icon="💻" data-layer="TIER 3 — IT &amp; SYSTEMS"
+  data-title="IT &amp; Systems"
+  data-purpose="Maintains all technology systems that run the business — from booking platforms and CRM to cybersecurity and reporting."
+  data-staff="IT Manager||Systems Administrator||CRM / Booking Systems Support||Data Analyst"
+  data-responsibilities="Manage and maintain all booking systems and reservation platforms||Oversee website performance, hosting and security||Build and maintain reporting dashboards for all departments||Maintain cybersecurity protocols and data protection standards||Manage all API integrations with airlines, hotels and third-party platforms||Provide day-to-day technical support across all departments"
+  data-interactions="Supports all departments with day-to-day tech issues||Works with Marketing on website and digital tools||Works with Finance on reporting and accounting systems||Works with Sales on CRM and booking platform performance||Supports Operations with booking and ticketing platforms"
+  x="432" y="388" width="182" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+<!-- HR & Admin -->
+<rect class="izone" data-id="hr" data-icon="👥" data-layer="TIER 3 — HR &amp; ADMINISTRATION"
+  data-title="HR &amp; Administration"
+  data-purpose="Manages all people, recruitment, staff welfare, office administration and payroll across ORN Travel."
+  data-staff="HR Manager||Recruitment Coordinator||Office Administrator||Payroll Administrator||Training Coordinator"
+  data-responsibilities="Manage all recruitment processes — job postings, interviews, offers and onboarding||Handle employment contracts, staff reviews and disciplinary processes||Run office administration across all ORN Travel locations||Coordinate all staff training, inductions and professional development||Manage payroll inputs and liaise with Finance on all staff costs||Ensure all offices comply with local employment law and HR regulation"
+  data-interactions="Recruits and onboards staff for all departments||Works with Finance on payroll and staff costs||Works with Compliance on employment law and HR regulation||Supports Executive Management on organisational structure"
+  x="622" y="388" width="182" height="108" fill="rgba(0,0,0,.001)" stroke="none" rx="8" pointer-events="all"/>
+
+</svg>
+      </div>
+
+      <div class="svg-legend">
+        <div class="leg"><div class="ldot" style="background:#0D1B2A"></div>Executive</div>
+        <div class="leg"><div class="ldot" style="background:#1D4ED8"></div>Sales &amp; Reservations</div>
+        <div class="leg"><div class="ldot" style="background:#065F46"></div>Product &amp; Contracting</div>
+        <div class="leg"><div class="ldot" style="background:#9D174D"></div>Marketing</div>
+        <div class="leg"><div class="ldot" style="background:#B45309"></div>Operations</div>
+        <div class="leg"><div class="ldot" style="background:#7C3AED"></div>Customer Service</div>
+        <div class="leg"><div class="ldot" style="background:#A16207"></div>Finance</div>
+        <div class="leg"><div class="ldot" style="background:#BE123C"></div>Compliance &amp; Legal</div>
+        <div class="leg"><div class="ldot" style="background:#1D4ED8"></div>IT &amp; Systems</div>
+        <div class="leg"><div class="ldot" style="background:#334155"></div>HR &amp; Admin</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sb-head">
+      <div class="sb-eyebrow" id="sb-eyebrow">DEPARTMENT DETAIL</div>
+      <div class="sb-title-row">
+        <div class="sb-icon" id="sb-icon">📌</div>
+        <div class="sb-title" id="sb-title">Select a department</div>
+        <button class="sb-close" onclick="closeSidebar()" title="Close">&#x2715;</button>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <button id="sb-prev" onclick="navZone(-1)">&#x2190; Prev</button>
+      <div class="sb-cnt" id="sb-cnt">— / —</div>
+      <button id="sb-next" onclick="navZone(1)">Next &#x2192;</button>
+    </div>
+    <div class="sb-body" id="sb-body">
+      <p style="color:#94A3B8;font-size:12px;text-align:center;padding:40px 0">Click any department on the chart to see its full breakdown here.</p>
+    </div>
+    <div class="sb-foot">ORN Travel · Internal Use · 2026 &nbsp;·&nbsp; ← → keys to navigate</div>
+  </div>
+
+</div><!-- /.layout -->
+
+<script>
+var curIdx = -1;
+
+var COLORS = {
+  exec:'#0D1B2A', sales:'#1D4ED8', product:'#065F46', marketing:'#9D174D',
+  ops:'#B45309', cs:'#7C3AED', finance:'#A16207', compliance:'#BE123C',
+  it:'#1D4ED8', hr:'#334155'
+};
+
+function openSidebar(el) {
+  var allZ = Array.from(document.querySelectorAll('.izone'));
+  curIdx = allZ.indexOf(el);
+
+  allZ.forEach(function(z) {
+    z.setAttribute('stroke','none');
+    z.setAttribute('fill','rgba(0,0,0,0.001)');
+  });
+  el.setAttribute('stroke','#C9A84C');
+  el.setAttribute('stroke-width','3');
+  el.setAttribute('fill','rgba(201,168,76,0.10)');
+
+  var id      = el.getAttribute('data-id');
+  var layer   = el.getAttribute('data-layer')   || '';
+  var icon    = el.getAttribute('data-icon')    || '📌';
+  var title   = el.getAttribute('data-title')   || '';
+  var purpose = el.getAttribute('data-purpose') || '';
+  var staff   = (el.getAttribute('data-staff') || '').split('||').filter(Boolean);
+  var resp    = (el.getAttribute('data-responsibilities') || '').split('||').filter(Boolean);
+  var inter   = (el.getAttribute('data-interactions') || '').split('||').filter(Boolean);
+  var color   = COLORS[id] || '#1B4F8A';
+
+  document.getElementById('sb-eyebrow').textContent = layer;
+  document.getElementById('sb-icon').textContent    = icon;
+  document.getElementById('sb-title').textContent   = title;
+  document.getElementById('sb-cnt').textContent     = (curIdx + 1) + ' / ' + allZ.length;
+  document.getElementById('sb-prev').disabled       = (curIdx <= 0);
+  document.getElementById('sb-next').disabled       = (curIdx >= allZ.length - 1);
+
+  var html = '';
+
+  // Purpose
+  html += '<div class="sb-section">';
+  html += '<div class="sb-section-label">Purpose</div>';
+  html += '<div class="sb-purpose">' + purpose + '</div>';
+  html += '</div>';
+
+  // Staff
+  if (staff.length) {
+    html += '<div class="sb-section">';
+    html += '<div class="sb-section-label">Typical staff structure</div>';
+    html += '<div class="sb-staff-grid">';
+    staff.forEach(function(s) {
+      var initials = s.split(/\s+/).map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+      html += '<div class="sb-staff-item">';
+      html += '<div class="sb-staff-dot" style="background:'+color+'">'+initials+'</div>';
+      html += '<div class="sb-staff-name">'+s+'</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  }
+
+  // Responsibilities
+  if (resp.length) {
+    html += '<div class="sb-section">';
+    html += '<div class="sb-section-label">Main responsibilities</div>';
+    html += '<ul class="sb-list">';
+    resp.forEach(function(r) { html += '<li>'+r+'</li>'; });
+    html += '</ul></div>';
+  }
+
+  // Interactions
+  if (inter.length) {
+    html += '<div class="sb-section">';
+    html += '<div class="sb-section-label">How it interacts with other departments</div>';
+    html += '<div class="sb-interact">';
+    inter.forEach(function(i) {
+      html += '<div class="sb-interact-item">';
+      html += '<span class="sb-interact-dot" style="background:'+color+'"></span>';
+      html += i;
+      html += '</div>';
+    });
+    html += '</div></div>';
+  }
+
+  document.getElementById('sb-body').innerHTML = html;
+  document.getElementById('sb-body').scrollTop = 0;
+  document.getElementById('layout').classList.add('sidebar-open');
+}
+
+function closeSidebar() {
+  document.getElementById('layout').classList.remove('sidebar-open');
+  document.querySelectorAll('.izone').forEach(function(z) {
+    z.setAttribute('stroke','none');
+    z.setAttribute('fill','rgba(0,0,0,0.001)');
+  });
+  curIdx = -1;
+}
+
+function navZone(d) {
+  var allZ = Array.from(document.querySelectorAll('.izone'));
+  var n = curIdx + d;
+  if (n >= 0 && n < allZ.length) openSidebar(allZ[n]);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { closeSidebar(); return; }
+  var open = document.getElementById('layout').classList.contains('sidebar-open');
+  if (!open) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); navZone(1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); navZone(-1); }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.izone').forEach(function(z) {
+    z.addEventListener('click', function(e) { e.stopPropagation(); openSidebar(this); });
+    z.addEventListener('mouseenter', function() {
+      if (curIdx === -1 || document.querySelectorAll('.izone')[curIdx] !== this) {
+        this.setAttribute('stroke','#C9A84C');
+        this.setAttribute('stroke-width','2');
+        this.setAttribute('fill','rgba(201,168,76,0.07)');
+      }
+    });
+    z.addEventListener('mouseleave', function() {
+      var allZ = Array.from(document.querySelectorAll('.izone'));
+      if (allZ[curIdx] !== this) {
+        this.setAttribute('stroke','none');
+        this.setAttribute('fill','rgba(0,0,0,0.001)');
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
